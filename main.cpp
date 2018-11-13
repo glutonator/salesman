@@ -5,7 +5,6 @@
 using namespace std;
 
 
-
 int main() {
 
 
@@ -21,10 +20,19 @@ int main() {
 //    printGraph(adj, V);
 //    return 0;
 
-    Graph *graph = new Graph(5);
-    graph->addEdge(0,1,10);
-    graph->printGraph();
+    Graph *graph = new Graph(3);
+    graph->addEdge(0, 1, 10);
+//    graph->printGraph();
 
+    list<vector<int>>  qqq = graph->allPossiblePermutationsNodes();
+    std::cout << std::endl;
+
+    for(auto it = qqq.begin(); it!=qqq.end(); ++it) {
+        for(auto it2 = it->begin(); it2!=it->end(); ++it2) {
+            std::cout << *it2;
+        }
+        std::cout << std::endl;
+    }
     std::cout << "Hello, World!" << std::endl;
     return 0;
 }

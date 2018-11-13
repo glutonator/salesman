@@ -6,6 +6,7 @@
 #define SALESMAN_GRAPH_H
 
 #include <vector>
+#include <list>
 
 using namespace std;
 
@@ -23,6 +24,7 @@ public:
 
     void printGraph();
 
+    list <vector<int>> allPossiblePermutationsNodes();
 
 };
 
