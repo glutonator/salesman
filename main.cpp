@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <chrono>
 #include "graph.h"
 
 using namespace std;
@@ -7,32 +8,36 @@ using namespace std;
 
 int main() {
 
+    int numberOfNodes = 10;
 
-//    int V = 5;
-//    vector<pair<int, int> > adj[V];
-//    addEdge(adj, 0, 1, 10);
-//    addEdge(adj, 0, 4, 20);
-//    addEdge(adj, 1, 2, 30);
-//    addEdge(adj, 1, 3, 40);
-//    addEdge(adj, 1, 4, 50);
-//    addEdge(adj, 2, 3, 60);
-//    addEdge(adj, 3, 4, 70);
-//    printGraph(adj, V);
-//    return 0;
+    Graph *graph = new Graph(numberOfNodes);
 
-    Graph *graph = new Graph(3);
-    graph->addEdge(0, 1, 10);
-//    graph->printGraph();
+    graph->createComleteGraph();
+    graph->printGraph();
 
-    list<vector<int>>  qqq = graph->allPossiblePermutationsNodes();
-    std::cout << std::endl;
+    // Record start time
+    auto start = std::chrono::high_resolution_clock::now();
 
-    for(auto it = qqq.begin(); it!=qqq.end(); ++it) {
-        for(auto it2 = it->begin(); it2!=it->end(); ++it2) {
-            std::cout << *it2;
-        }
-        std::cout << std::endl;
-    }
+    // Portion of code to be timed
+//    list<vector<int>> qqq = graph->findShortestPath();
+    graph->findShortestPathBetter();
+
+    // Record end time
+    auto finish = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = finish - start;
+    std::cout << "Elapsed time: " << elapsed.count() << " s\n";
+
+
+
+
+//    std::cout << std::endl;
+//
+//    for(auto it = qqq.begin(); it!=qqq.end(); ++it) {
+//        for(auto it2 = it->begin(); it2!=it->end(); ++it2) {
+//            std::cout << *it2;
+//        }
+//        std::cout << std::endl;
+//    }
     std::cout << "Hello, World!" << std::endl;
     return 0;
 }

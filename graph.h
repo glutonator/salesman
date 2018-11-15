@@ -24,7 +24,15 @@ public:
 
     void printGraph();
 
-    list <vector<int>> allPossiblePermutationsNodes();
+    list <vector<int>> findShortestPath();
+    void findShortestPathBetter();
+
+
+    void createComleteGraph();
+
+    int countWeightOfPath(vector <int> singlePermutation);
+
+    int getWeight(int node1,int node2);
 
 };
 

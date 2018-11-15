@@ -14,8 +14,8 @@ Graph::Graph(int numberOfNodes) {
 
 // To add an edge
 void Graph::addEdge(int node1, int node2, int weight) {
-    adjacencyList[node1].push_back(make_pair(node1, weight));
-    adjacencyList[node2].push_back(make_pair(node2, weight));
+    adjacencyList[node1].push_back(make_pair(node2, weight));
+    adjacencyList[node2].push_back(make_pair(node1, weight));
 
 }
 
@@ -34,31 +34,117 @@ void Graph::printGraph() {
     }
 }
 
-list<vector<int>> Graph::allPossiblePermutationsNodes() {
+list<vector<int>> Graph::findShortestPath() {
     //list of all possible permutations
-    list <vector<int>> out = list<vector<int>>();
+    list<vector<int>> out = list<vector<int>>();
+
+    int shortestPathValue;
+    vector<int> shortestPath;
 
     //popluation of vector
-    vector <int> singlePermutation =  vector <int>(numberOfNodes);
-    iota (std::begin(singlePermutation), std::end(singlePermutation), 0);
+    vector<int> singlePermutation = vector<int>(numberOfNodes);
+    iota(std::begin(singlePermutation), std::end(singlePermutation), 0);
     //sorting, not necessary
     sort(begin(singlePermutation), end(singlePermutation));
     //add first element
+    shortestPath = singlePermutation;
     out.push_back(singlePermutation);
-    std::cout << singlePermutation[0] << singlePermutation[1] << singlePermutation[2] << std::endl;
+    shortestPathValue = countWeightOfPath(singlePermutation);
 
     //add all other elements
     while (std::next_permutation(singlePermutation.begin(), singlePermutation.end())) {
-        for (auto it = singlePermutation.begin(); it!=singlePermutation.end(); ++it) {
-            //todo: dodać sprawdzaenie czy dany node jest połaczyny z frugim nodem i tak dla wszystkic hkolejnych par w wektorze
-            std::cout << *it;
+        int count = countWeightOfPath(singlePermutation);
+        if (count < shortestPathValue) {
+            shortestPathValue = count;
+            shortestPath = singlePermutation;
         }
         out.push_back(singlePermutation);
-        std::cout << std::endl;
     }
+    std::cout << "shortestPathValue" << " " << shortestPathValue << endl;
+    std::cout << "shortestPath" << " ";
 
+    for (auto it = shortestPath.begin(); it != shortestPath.end(); ++it) {
+        std::cout << *it;
+    }
+    std::cout << std::endl;
     return out;
 }
+
+void Graph::findShortestPathBetter() {
+    //list of all possible permutations
+//    list<vector<int>> out = list<vector<int>>();
+
+    int shortestPathValue;
+    vector<int> shortestPath;
+
+    //popluation of vector
+    vector<int> singlePermutation = vector<int>(numberOfNodes);
+    iota(std::begin(singlePermutation), std::end(singlePermutation), 0);
+    //sorting, not necessary
+    sort(begin(singlePermutation), end(singlePermutation));
+    //add first element
+    shortestPath = singlePermutation;
+//    out.push_back(singlePermutation);
+    shortestPathValue = countWeightOfPath(singlePermutation);
+
+    //add all other elements
+    while (std::next_permutation(singlePermutation.begin(), singlePermutation.end())) {
+        int count = countWeightOfPath(singlePermutation);
+        if (count < shortestPathValue) {
+            shortestPathValue = count;
+            shortestPath = singlePermutation;
+        }
+//        out.push_back(singlePermutation);
+    }
+    std::cout << "shortestPathValue" << " " << shortestPathValue << endl;
+    std::cout << "shortestPath" << " ";
+
+    for (auto it = shortestPath.begin(); it != shortestPath.end(); ++it) {
+        std::cout << *it;
+    }
+    std::cout << std::endl;
+}
+
+void Graph::createComleteGraph() {
+    int numberOfNodes = this->numberOfNodes;
+    //weight increase by one
+    int count = 1;
+    //all combinations od nodes
+    for (int i = 0; i < numberOfNodes; i++) {
+        for (int j = i + 1; j < numberOfNodes; j++) {
+            addEdge(i, j, count);
+            count = count + 1;
+        }
+    }
+}
+
+int Graph::countWeightOfPath(vector<int> singlePermutation) {
+    int count = 0;
+    int node1 = singlePermutation[0];
+    int beginAndEndNode = node1;
+    int node2 = -1;
+    for (auto it = singlePermutation.begin() + 1; it != singlePermutation.end(); ++it) {
+        node2 = *it;
+        count += getWeight(node1, node2);
+        node1 = node2;
+    }
+    //we need to go back to begining node
+    count += getWeight(node1, beginAndEndNode);
+    return count;
+}
+
+int Graph::getWeight(int node1, int node2) {
+    int out = -1;
+    for (auto it = this->adjacencyList[node1].begin(); it != this->adjacencyList[node1].end(); ++it) {
+        if (it->first == node2) {
+            out = it->second;
+            break;
+        }
+    }
+    if (out == -1) throw "Edge not found";
+    return out;
+}
+
 
 
 
